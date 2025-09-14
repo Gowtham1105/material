@@ -1,0 +1,305 @@
+# Syllabus
+
+**Git / GitHub**
+
+o Introduction to Version Control Systems
+
+o Creating GitHub repository
+
+o Using Git – Introduction to Git commands.
+
+# Version control
+
+Real-life situation: 
+
+- Different developers work on the same/different parts of code files for code enhancements/bug fixes
+- Problem
+    - Simultaneuos changes done by multiple developers at the same time
+    - Accidental overwriting of each other’s work
+    - Not taking the correct base file for making code changes
+    - Not uploading the correct file after changes are done
+- Solution: Version control software
+
+Example:
+
+- Developer wants to push version 1.0 of the code to an application server
+- After the push, the sever runs code version 1.0
+- Now a team member asks for her code
+- This team member has a folder called version 2.0 and has deployed this version of the code on the server.
+- Unfortunately, his code was not properly tested, and hence crashes
+- Rolling back to version 1.0 is not easy - it is all mixed up
+
+Problem summary
+
+- Rollback is time consuming
+- No audit tracking
+- Not scalable for large teams
+
+## Version control system and repository
+
+- Developers now push the code to a repository. Repository is a centralized storage for managing and tracking changes to a collection of files and directories
+- Code will be deployed from the repository.
+- If another team member wants the code
+    - Fetch from repository
+    - Modify and push to repository(as another version)
+- If problems after deployment of version 2.0, go back to version 1.0
+
+# Git
+
+Git is used to implement version control.
+
+- It is the leading verson contrl system in the work. Free and open source
+- Created by Linus Torwalds
+- Git is not github
+- Git is a local verson contrl software on our machine
+- Github (created in 2008, now owned by Microsoft) = (Cloud/Internet-based repository)
+- GitHub has free version and a paid version(paid version used by enterprises)
+
+Git in our pc, GitHub (remote common server)
+
+## Types of version control system
+
+https://www.geeksforgeeks.org/git/version-control-systems/
+
+- Centralized (the old model)
+    - Local copy per user and one common central repository
+    - Single point of failure
+    - Requries constatn connectivity. Disconnection can be dangerous
+    - Directly connected to the outside.
+    - e.g.: Subversion, Endevor, Microsoft VSS(Visual Source Safe)
+- Distributed (the new model)
+    - Local in machine, local repository, main repository
+    - Local copy and local repository per user and one common central repository.
+    - More scalable
+    - Shielded
+    - e.g.: Mercurial, Git
+
+## Git and GitHub parts
+
+Git
+
+- Workspace
+- Index/staging area
+- Local repository
+
+- Remote repository (GitHub)
+
+Workspace
+
+- The area where the developer is working and creating/modifying his/her code.
+- Work is not saved here
+
+Index/Staging area
+
+- Area that closely mimics the local repository
+- When the developer is done for the day, he saves his work as versions in the repository. The developer can go back to a pervious version if he needs.
+
+Local repository
+
+- The local area for all the code.
+- It is like the final copy of the code on the local LAN
+
+Remote repository
+
+- The remote area (GitHub) for all the code
+
+# Getting started Git
+
+## Basic Git commands
+
+Git workflow - 1
+
+- `git add file1` move file from workspace to intex/staging area
+- `git commit file1 -m "Added file1": Local repository` move files from staging area to local repository. Can be done infinitely
+- `git push: Remote repository`  move files from local repository to remote repository
+
+NOTE: Remember the sequence. Not all the commands.
+
+## Installing Git
+
+GIt needs to be installed in Windows. but not on Apple and Linux(already there)
+
+`git --version` in qterminal
+
+Know terminologies
+
+During interviews, your repositories play a huge role as it is a good way to demonstrate your skills.
+
+It is almost like a model cv in the job market.
+
+### Create a repository Method 1
+
+Just stick to simple, understandable names.
+
+Otherwise it looks unprofessional.
+
+Leave your visibility to be public. When you make it private, you have to set permission. Only create a private repository if necessary.
+
+Keep licence `No licence`
+
+Explore if and when necessary.
+
+For now, for learning purpose, don’t change anything.
+
+You will be lead to the cheat sheet of the lab exam.
+
+Your interviewer will not ask you these questions.
+
+Before pushing, you have to sync your terminal with github account.
+
+check
+
+- `git config user.name`
+- `git config user.email`
+
+Set user name and email id for local git set up
+
+- `git config --global [user.name](http://user.name) "dbda5125cdac"`
+- `git config --global usernemail “dbda5124cdac@gmail.com”`
+
+Try the check comands to see if you are synced
+
+`git status` to check what is happening.
+
+`git add .` add the current directory
+
+`git status`
+
+`git commit -m "We are trying git commands”`
+
+`git status`
+
+`git log` tells us the log of commits. Each commit has a githash commit.
+
+`git branch -M main`
+
+`git push -u origin main` NOTE: Github does not accept password as method for pushing repositories.
+
+Click on profile picture
+
+![image.png](attachment:9cdfef11-b75a-4c02-bc65-bdcbfbbb4a3b:image.png)
+
+click on settings > go to developer settings>personal access tokens > tokens classic
+
+Generate new token > generate new token classic
+
+add Note
+
+Set ‘No expiration’
+
+Do this only for exam purposes. DO HAVE EXPIRATION in your professional cases.
+
+Select everthing at the top (for study only)
+
+copy and save the token. FYI(you will only see it once)
+
+```
+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
+```
+
+Have the token available during exam time.
+
+Repeat the `git push -u origin main` . Enter username as usual. Instead of password, just copypaste the token.
+
+### Create a repository method 2
+
+Create a repo on github > manually create a directory with repo name > go to that directory > 
+
+Create new repository using init
+
+```
+git remote add origin https://github.com/dbda5124cdac/dbda_25_09_02_init
+```
+
+```bash
+cd ~
+mkdir dbda_25_09_02_init
+cd dbda_25_09_02_init
+git status
+```
+
+In the first case we have linked the 
+
+`git init`
+
+`echo "Hi" > text.txt`
+
+`git add .`
+
+`git commit -m "Just testing git init"`
+
+`git branch -M main`
+
+`git remote add origin https://github.com/dbda5124cdac/dbda_25_09_02_init.git`
+
+`git push -u origin main`
+
+To set the git repository name
+
+# Main/Master branch
+
+Contains the stable code.
+
+We do not want to do any work on this (in case a problem occurs it will negatively effect)
+
+Concept of branches is used.
+
+Purpose of stable code is to take it and deploy it.
+
+We create a copy of the main branch(in their respective machines) each of them have a branch.
+
+If two people work on the same code at the same time, they will have two branches. Each person will work on his own branch.
+
+In the end they merge the two branches into a single branch.(b1 into b2, or b2 into b1), after that we merge this branch into the main branch.
+
+- Create a repository `git-branch-merge-test`
+- Clone it in home directory
+- `cd`
+- `git init`
+- `nano hello.py`
+- Add code to it and save
+- `git add .`
+- `git commit -m “Testing branch/merge”` NOTE: Adding and committing the created file before creating the branch is important.
+- `git checkout -b bug-1-branch` create a branch
+- `git checkout -b bug-2-branch` create a branch
+- `git branch` view branches
+- `git checkout bug-1-branch` switch to branch
+- `git switch bug-2-branch` switch to branch. Both are same.
+- `git switch bug-1-branch`
+- `nano [hello.py](http://hello.py)` as developer 1
+- Make changes and save
+- `git add .`
+- `git commit -m "bug-1 fixed`
+- `git branch`
+- `git log`
+- `git switch bug-2-branch`
+- `nano [hello.py](http://hello.py)` The file d2 will see will be the original from main. d2 does not see the changes added by d1.
+- Make changes and save
+- `git add .`
+- `git commit -m "bug-2-fixed"`
+- NOTE: Whichever branch we are in, we must merge the other branch.
+- As d2 `git merge bug-1-branch`. This will fail as multiple people have edited the same file. The merge will succeed only if their changes do not overlap. Manually edit the code (`nano hello.py`) and make changes in the code(which will be different from what you left it)
+- Try `git merge bug-1-branch` it will fail `error: Merging is not possible because you have unmerged files`
+- Do `git add .`
+- `git commit -m "merge conflict resolved"`
+- `git merge bug-1-branch`
+- `git branch`
+- `git switch main` To switch to main user.
+- `git merge bug-2-branch`. This part has to be done with extreme care, as we are modifying our stable product.
+- `git branch -d bug-1-branch` deletes the branch (`-d`) is the delete option
+- `git branch`
+- `git branch -d bug-2-branch`
+- `git branch`
+
+# Renaming repositories in remote and local
+
+- In the remote repository, go to the repository settings. You will see the renaming option there.
+- Now go to the repository `<code>` page.
+- Copy the complete url (https included)
+- Now in local terminal, move to the git directory
+- `git remote -v` to view confirm old current URL.
+- `git remote set-url origin NEW_REPO_URL`. NEW_REPO_URL is the url you copied, the updated url of your repository.
+- `git remote -v` to confirm new current URL updation.
+- GOOD PRACTICE: Rename the local directory to the name of the repository. Changing the local folder name is a convenience for organization but does not affect Git's operation
+    - `mv OLD_NAME NEW_NAME`
+-
