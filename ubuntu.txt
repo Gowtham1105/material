@@ -1,0 +1,50 @@
+# Create Ubuntu instance using EC2 and launching it, connecting to it with SSH
+
+- Create EC2 instance (ubuntu) with key pair `.pem` file.
+- Go to the instance
+- Scroll down to **Security > Inbound rules** tables > **Security groups** column > `launch-wizard-3` (port 22, protocl tcp)
+- Select the link of the security group ID in it
+- You will see **Edit inboud rules** in it. Click on it
+- **Add rule**.
+    - HTTP
+        - Port range: 80
+        - Source
+            - Custom
+            - 0.0.0.0/0
+    - HTTPS
+        - port range: 443
+        - Source
+            - Custom
+            - 0.0.0.0/0
+- **Save rules**
+- Go back to the instance console
+- Click **Connect**
+    - **SSH Client**
+    - Copy the code in the “example” part
+- Go the the local directory of the `.pem` file
+- Open cmd in the file path
+- past the command you copied and click enter
+- Type ‘yes’ to the query
+- You will have linux terminal prompt in the cmd.
+
+- sudo apt-get update -y
+
+Connect to it
+
+# Linux Apache
+
+- Open Qterminal
+- Update and upgrade Ubuntu
+    - `sudo apt-get update -y; sudo apt-get upgrade -y`
+- Install apache 2
+    - `sudo apt-get install apache2 -y`
+- Check status
+    - `sudo systemctl status apache2`
+- Start
+    - `sudo systemctl start apache2`
+
+Go to ec2 instance > Connect > Connect
+
+Copy the public IPv4 address
+
+IN new tab type http://<paste>

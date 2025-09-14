@@ -1,0 +1,526 @@
+# Syllabus
+
+o Introduction to Cloud
+o paradigms
+o Characteristics and benefits
+o Understanding Cloud Vendors (AWS/Azure/GCP)
+o Definition
+o Characteristics
+o Components
+
+**Lab Assignments:**
+
+o Study about cloud and other similar configurations.
+
+o Explore available solutions.
+
+o Cloud Architecture
+
+# Introduction to Cloud
+
+## Why Cloud?
+
+- Peak loads vary (high during weekends and holidays), high cost
+- Solution before Cloud: Peak load provisioning - buy infrastructure for peak load - wasted during less load
+- Earlier: own data center (in premisis, also called **in-prim**)
+- Now: Cloud
+    - It frees us from buying things
+    - AWS rent services. we only pay for that duration when we use the service.
+
+# Amazon Web Service
+
+## EC2 (Elastic Compute Cloud)
+
+- Part of IaaS
+- Allows creation of ‘rented’ virtual machine
+- We decide machine type, OS
+
+- Login to aws lightsail
+- NOTE: Most of the service offered many Cloud is same.
+    - Learn other cloud services on an need to do basis (e.g.: GCP and Azure)
+- Left side menu > All services
+- Or search `alt + s` (on the top left)
+- Search ‘EC2’
+- Click
+- Click on `Launch instance`
+- Give instance name
+- Select Application and OS
+- NOTE: Always look for Free tier eligible (NOTE: 150$)
+- Instance type: (there are many (you cannot choose t2 and x8g)
+- Click on `Create new key pair`
+    - name: my-dbda-key-pair
+    - keypair rsa
+    - private key file format
+        - .pem if you are using linux
+        - .ppk if you are using windows (private key in ppk file with us. public key in the ec2 os)
+        - A file will be downloaded.
+- Check
+    - Allow SSH traffic
+    - Allow HTTP traffic from internet
+    - Allow HTTP traffic from internet
+- Advanced details
+    - User data - optional : Instructions to install and launch apache
+    
+    ```bash
+    #!bin/bash
+    yum update -y
+    yum install -y httpd
+    systemctl start httpd
+    systemctl enable httpd
+    echo "<h1>Hello World from PG-DBDA</h1>" > /var/www/html/index.html
+    ```
+    
+- Click `Launch Instance`
+- It will show you an instance id. Click on instance id https://eu-north-1.console.aws.amazon.com/ec2/home?region=eu-north-1#InstanceDetails:instanceId=i-0ac71b374b6561dd8
+- It will show you Public IPv4 address. Copy it
+- In a browzer go to the IP address
+
+In windows, search for `Putty' it allows us to remotely connect it our EC2 instance.
+
+Putty
+
+Sessoin host name(address)
+
+Connection > secondn betwen keepalives 10
+
+SSH>Auth>Credentials give ppk file
+
+NOTE Your connection matters.
+
+login as `ec2-user`
+
+Go to the instance in AWS EC2
+
+In left pane go to dashboard
+
+In resourcese> Instances(running) (click)
+
+Select instance, go to `instance state`, `stop instance`
+
+## AWS S3
+
+Simple Storage Service
+
+Block storage: Like attaching a harddisk/ssd on the cloud
+
+- We are just given raw storage
+
+File storage: Allows access to a block storage system over a network
+
+- A harddisk, formatted with drives is given.
+
+Object storage
+
+- Allows storage and retrieval of **files** as if they are `object`s.
+- **Directory** here will be called `bucket` or `container`.
+- It’s not just a name change. When a file becomes an object, it has a globally unique url, which you can access from anywhere in the world. The DB has the url, not the file(which is in S3). Dramatically reduce the load on webservers and make adding more data to the web possible.
+- Keep the minimum data you need, rest on servers
+- Static websites can be stored in S3. Not dynamic websites.
+- S3 has solved many business problems.
+
+In projects we work in issues can emerge(costs rise very rapidly) for having allocated storage.
+
+REST API
+
+REST ful server
+
+HTTP protocal used with rest api
+
+**Bucket** is a collection of **objects**. An **object** is a file you upload
+
+The more you use S3, less will be the charges.
+
+### FinOps
+
+Financial costing of the cloud.
+
+### Create a bucket and upload files
+
+- All services(or search S3 in the top right search bar)
+- `Create bucket`
+- Bucket type
+    - change only if business requirement
+- Bucket name has to be globally unique
+- Block public access..Buckets are publically accessible only if it is unblocked(normaly never)
+- `Create bucket`
+- Drag and drop or manually select files
+- Look at destination
+- `Upload`
+
+### Remove bucket
+
+- Go to `S3> Buckets`
+- Select bucket
+- Click `Empty`
+- Confirm empty
+- Select bucket
+- Click `Delete`
+- Confirm delete
+
+### How to practically use a bucket
+
+## IAM
+
+Identity and Access Management
+
+When we create an AWS account: root account gets created.
+
+We can always login with root account, if it is our account.
+
+In case it is a company account, many people will want to login. YOu cannot give root account access to everyone. It is not recommended to use root account for corporate.
+
+- So once you have root account, use root account to create other users (IAM users)
+- Use one of those other user accounts to regularly login
+- Meaning: Do Not use the root account for regular logins
+- Crisis: Use root account.
+
+#### Security recomendations
+
+Don’t rely only on the passwd to login.
+
+- User id + password: 1-factor authentication. “Something” you remember(password).
+- User id + password + otp : multi-factor authentication. “Something” you remember(password) + something that you must be able to recieve and reproduce (OTP). These days a third party authenticator app is used.
+
+- In the left pane, click on users
+- Click `create user` to the right.
+- Pick username
+- Click on Provide user access check box
+    - `I want to create an IAM user`
+    - Console password. Please give a complicated password
+    - Uncheck new password on next loign
+- Next
+- Attach policies directly
+    - `AdmininstatorAccess`
+- Next
+- If you feel everything is ok, `Create user`
+- Retrieve password
+    - Download the csv file and save it on local
+    - Console sign in url https://158491568979.signin.aws.amazon.com/console
+    - Do not forget the password.
+
+#### Enable MFA
+
+Authenticator app
+
+Google authenticator
+
+Scan code
+
+mfa code 1
+
+mfa code 2
+
+# Serverless and AWS Lambda
+
+**Serverless computing** does not mean *no server*, but it means that the developers do not have to worry about servers
+
+Developers just need to deploy code, AWS will manage the servers
+
+**AWS Lambda**: Event-driven, serverless computing platform
+
+develper creates and dvelops lambda fn. An een (e.g. file upload in S3) triggers it.
+
+The lambda function should only run for a few seconds. No lambda function should run for more than 15 seconds.
+
+Creating lambda fn is of 0 cost.
+
+When fn is triggered charges. The longer you execute, higher will be the charges. 
+
+- Create bucket
+- Search IAM > roles
+- `Create role`
+    - AWS service
+    - Use case lambda
+- Next
+- Permision
+    - amazons3fullaccess
+    - awslambdaexecute : Do all operations on s3
+    - awslambdabasicexecutionrole
+- Next
+- Role
+    - name: my-s3-lambda-function-roles
+- `Create role`
+
+- Create a lambda function
+- Go to lambda service
+- `Create a function`
+- `Author from scratch`
+- Open the Functions page of the lambda console
+- Choose create function
+- Choose author from scratch
+- Under basic information, do the following
+    - For function name, enter my-s30function
+    - For runtime, choose python 3.9
+    - For architecture, enter x86_64
+- Change default execution role
+    - use an existing role
+        - my-s3-lambda-function-roles
+- `create function`
+
+Create AWS Trigger
+
+- `Add trigger`
+- select a source > s3
+    - chooose your bucket
+- Event types
+    - all object create events
+    - Put
+    - post
+    - copy
+    - multipart upload completed
+- Uncheck recursive invocation
+- `Add`
+
+Codeing functino
+
+https://serverlessland.com/snippets/integration-s3-to-lambda?utm_source=aws&utm_medium=link&utm_campaign=python&utm_id=docsamples&tab=python
+
+Copy the code
+
+python boto library is important for lambda
+
+replace with code
+
+Deploy
+
+Upload files to your bucket
+
+Lambda > function > monitor
+
+NOTE: Cloudwatch: Audit Logging Service
+
+Refresh
+
+view cloudwatchlogs
+
+Cleanup
+
+- s3
+- S3 must be empty and deleted. Always empty then delete.
+- Delete lambda
+    - Select funciotn
+    - action>delete
+    - confirm
+
+### Remotely access aws account
+
+Install AWS CLI and SAM CLI
+
+AWS CLI
+
+SAM CLI - 
+
+AWS SAM
+
+aws cli download for windows 64 bit
+
+https://docs.aws.amazon.com/cli/v1/userguide/install-windows.html
+
+IAM users > users
+
+- click on username
+- create access key
+- Use case
+    - Command line interface
+    - Confirm check
+    - Next
+- Description : my-aws-cli-id
+- create csv file
+- download csv file
+
+Open a new cmd in windows
+
+`aws --version`
+
+`aws configure`
+
+copy access key id from the csv file and past it here
+
+similary do for second access key
+
+Default region name just click enter. Do it once more
+
+`aws iam create-user --user-name dummyuser`
+
+Check for new user in user
+
+whatever you can do using console, you can do using command line
+
+# Hosting static website with AWS S3
+
+Create S3 bucket
+
+index.html
+
+```html
+<html>
+ <head>
+  <title> S3 static website</title>
+ </head>
+ 
+ <body>
+  <h3>Welcom to our S3 Website!</h3>
+ </body>
+</html>
+```
+
+error.html
+
+```html
+<html>
+ <head>
+  <title>Error!!! S3 website</title>
+ </head>
+ 
+ <body>
+  <h3>Error!!! S3 Website!</h3>
+ </body>
+</html>
+```
+
+Save and add these file to the bucket.
+
+You need to create a policy for permissions
+
+Go to your bucket > permissions>**Block public access (bucket settings)**
+
+temporarily turn it off
+
+Go to your bucket > permissions> bucket policy
+
+type this json policy.
+
+```json
+{
+ "Version": "2012-10-17",
+ "Statement": [
+	 {
+		 "Sid": "PublicReadGetObject",
+		 "Effect": "Allow",
+		 "Principal": "*",
+		 "Action": "s3:GetObject",
+		 "Resource": "arn:aws:s3:::dbda5124-0905-01/*"
+		}
+	]
+}
+ 
+```
+
+Version should not be changed. In ‘Resource’, change the bucket name to . S3 and bucketname should be seperated by 3 `:`.
+
+Save the file as a json file
+
+Copy the code and add it to the bucket  policy. Edit and Enable
+
+Go to bucket > yourbucket > properties > Static website browsing
+
+Edit , Enable , Enter
+
+- index document: index.html
+- Error document: error.html
+
+save changes
+
+Get your website URL
+
+In Properties→ Static website hosting, we will see the Website endpoint (e.g.: http://…………)
+
+Open it in a browser → Site should be live.
+
+Now do the clean up Empty bucket , delete bucket
+
+# Combining S3 and Lambda
+
+Lambda function to detect changes in source S3 bucket and reflect them in the target bucket
+
+1. Create two buckets source and target
+2. Create an IAM role for Lambda
+
+Go to IAM Console > roles > Create roles > name: lambda-s3-role
+
+Trusted entity: Lambda
+
+Attach policy: `AmazonS3FullAccess` (for quick setup; can be restricted later) `AWSLambdabasicExecutionRole`
+
+Name: Lambda-s3-role
+
+Create the lambda function
+
+- Lambda console > create a function
+- Author from scratch
+- Function name: copy-s3-files
+- Runtime: Python 3.12
+- Execution role: choose `Use existing role` > select `lambda-s3-role`
+- Create the function
+
+Add Lambda code
+
+```python
+import boto3
+ 
+s3 = boto3.client('s3')
+ 
+def lambda_handler(event, context):
+    # Extract details from the event
+    source_bucket = event['Records'][0]['s3']['bucket']['name']
+    source_key = event['Records'][0]['s3']['object']['key']
+    target_bucket = "dbda-5124-0905-target"
+ 
+    # Copy object to target bucket
+    copy_source = {'Bucket': source_bucket, 'Key': source_key}
+    s3.copy_object(CopySource=copy_source, Bucket=target_bucket, Key=source_key)
+ 
+    print(f"Copied {source_key} from {source_bucket} to {target_bucket}")
+    return {"status": "success"}
+```
+
+deploy
+
+Register Lambda in S3 (Event Notification) .. Now we connect my-source bucket to Lambda
+
+- Go to S3 console > Buckets > my-source-bucket > Properties
+- Scroll to Event notifications > click Create event notification
+- Name it: copy-to-target
+- Event types: choose All object create events
+- Destination: select our lambda function, pick our function: copy-s3-files
+- Save
+
+Upload files to the S3 source bucket
+
+Refresh target bucket to see if the files are visible in target bucket.
+
+# Five Characteristic of Cloud Computing
+
+Lab exam: Linux ,shell , git(1), launch apache/ngenix server and launch it on web.
+
+- On-demand self service: Users can provision resources and use them without human interaction from the service provider.
+- Broad network access: Resources available over the network, and can be accessed by diverse client platforms.
+- Multi-tenancy and resource pooling:
+    - Multiple customers and quickly acquire and dispose resources when needed
+    - Multiple customers are serviced from the same physical resources.
+- Rapid elasticity and scalability
+    - Automatically and quickly acquire and dispose resources when needed
+    - Quickly and easily scale based on demand
+- Measured service
+    - Usage is measured, users pay correctly for what they have used.
+
+# Six Advantages of Cloud Computing
+
+- Trading capital expense (CAPEX) for operating expense (OPEX)
+    - Pay On-Demand: don’t own hardware
+    - Reduced Total Cost of Ownership (TCO) & Operational Expense (OPEX)
+- Benefit from massive economies of scale
+    - Prices are reduced as AWS is more efficient due to large scale
+- Stop guessing capacity
+    - Scale based on actual measured usage
+- Increase speed and agility
+- Stop spending money running and maintaing data centers
+- Go global in minutes: leverage the AWS global infrastrcture
+
+# Managed Service/ Cloud Computing Types Iaas, Paas, SaaS
+
+- IaaS (Infrastructure as a Service) - Hosting
+- PaaS (Platform as a Service) - App Development
+- SaaS (Software as a Service) - Everything\
+
+This is sometimes called SPI model (SaaS, PaaS, IaaS)
